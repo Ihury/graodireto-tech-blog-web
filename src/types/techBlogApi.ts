@@ -58,6 +58,18 @@ export interface ValidateTokenResponseDto {
 	user: UserResponseDto;
 }
 
+// ===== TAG TYPES =====
+export interface TagDto {
+	slug: string;
+	name: string;
+	createdAt: string;
+}
+
+export interface ListTagsResponseDto {
+	tags: TagDto[];
+	total: number;
+}
+
 // ===== ARTICLE TYPES =====
 export interface ArticleTagDto {
 	slug: string;
@@ -76,7 +88,8 @@ export interface ArticleListItemResponseDto {
 	updatedAt: string;
 }
 
-export type ListArticlesResponseDto = OffsetPaginatedResult<ArticleListItemResponseDto>;
+export type ListArticlesResponseDto =
+	OffsetPaginatedResult<ArticleListItemResponseDto>;
 
 export interface ArticleResponseDto {
 	id: string;
@@ -134,7 +147,8 @@ export interface CommentWithRepliesResponseDto {
 	replies: CommentRepliesDto;
 }
 
-export type ListCommentsResponseDto = CursorPaginatedResult<CommentWithRepliesResponseDto>;
+export type ListCommentsResponseDto =
+	CursorPaginatedResult<CommentWithRepliesResponseDto>;
 
 export type ListRepliesResponseDto = CursorPaginatedResult<CommentResponseDto>;
 

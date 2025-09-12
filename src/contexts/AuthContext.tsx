@@ -114,11 +114,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 		refreshUser,
 	};
 
-	// Mostrar loading durante a inicialização
-	if (isLoading) {
-		return null;
-	}
-
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

@@ -2,7 +2,7 @@ import axios from "axios";
 import { ApiError, ApiResponse } from "@/types/techBlogApi";
 
 // Configuração da API
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 class TechBlogApiClient {
 	private axiosInstance: ReturnType<typeof axios.create>;

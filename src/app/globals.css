@@ -1,26 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+	--background: #ffffff;
+	--foreground: #141c0d;
+
+	/* Cores do TechBlog */
+	--primary: #67a22d; /* Verde (botões e hrefs) */
+	--placeholder-text: #758269; /* Texto no placeholder do input */
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--font-newsreader: var(--font-newsreader);
+
+	/* Cores do TechBlog */
+	--color-primary: var(--primary);
+	--color-placeholder-text: var(--placeholder-text);
+	--color-input-background: #edf2e8;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+	:root {
+		--background: var(--background);
+		--foreground: var(--foreground);
+	}
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: var(--font-newsreader), serif;
 }
