@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
-import { PageLayout, Container, PageHeader } from "@/components/layout";
+import { PageLayout, Container } from "@/components/layout";
 import { Button, SearchBar, Pagination } from "@/components/ui";
 import { ArticleList, TagFilter } from "@/components/features/articles";
 import { useArticles } from "@/hooks/useArticles";

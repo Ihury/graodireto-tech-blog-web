@@ -38,9 +38,9 @@ export default function EditArticlePage() {
 		if (!article) return;
 
 		try {
-			await updateArticle(article.id, data);
+			const updatedArticle = await updateArticle(article.id, data);
 			showSuccess("Artigo atualizado com sucesso!");
-			router.push(`/artigos/${article.slug}`);
+			router.push(`/artigos/${updatedArticle.slug}`);
 		} catch (err) {
 			const errorMessage =
 				err instanceof Error ? err.message : "Erro ao atualizar artigo";
@@ -90,17 +90,13 @@ export default function EditArticlePage() {
 		<AuthGuard>
 			<PageLayout className="min-h-screen bg-background-white">
 				<Container size="md" className="py-8">
-					<PageHeader
-						title="Editar artigo"
-						showBackButton
-						onBack={() => router.back()}
-					/>
-
-					<div className="bg-white rounded-lg border border-gray-200 p-8">
+					<div>
 						<ArticleForm
 							onSubmit={handleSubmit}
 							isLoading={updateLoading}
 							mode="edit"
+							showBackButton
+							onBack={() => router.back()}
 							initialData={{
 								title: article.title,
 								content: article.content,

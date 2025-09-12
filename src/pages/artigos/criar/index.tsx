@@ -17,9 +17,9 @@ export default function NovoArtigoPage() {
 		tags: string[];
 	}) => {
 		try {
-			await createArticle(data);
+			const newArticle = await createArticle(data);
 			showSuccess("Artigo criado com sucesso!");
-			router.push("/artigos");
+			router.push(`/artigos/${newArticle.slug}`);
 		} catch (err) {
 			const errorMessage =
 				err instanceof Error ? err.message : "Erro ao criar artigo";
@@ -31,14 +31,13 @@ export default function NovoArtigoPage() {
 		<AuthGuard>
 			<PageLayout className="min-h-screen bg-background-white">
 				<Container size="md" className="py-8">
-					<PageHeader
-						title="Novo artigo"
-						showBackButton
-						onBack={() => router.back()}
-					/>
-
-					<div className="bg-white rounded-lg border border-gray-200 p-8">
-						<ArticleForm onSubmit={handleSubmit} isLoading={createLoading} />
+					<div>
+						<ArticleForm
+							onSubmit={handleSubmit}
+							isLoading={createLoading}
+							showBackButton
+							onBack={() => router.back()}
+						/>
 					</div>
 				</Container>
 			</PageLayout>

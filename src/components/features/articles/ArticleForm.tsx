@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { TagDto } from "@/types/techBlogApi";
 import { useTags } from "@/hooks/useTags";
 import { Input, Button } from "../../ui";
+import { PageHeader } from "../../layout";
 
 interface ArticleFormProps {
 	onSubmit: (data: {
@@ -18,6 +19,8 @@ interface ArticleFormProps {
 		tags?: string[];
 	};
 	mode?: "create" | "edit";
+	showBackButton?: boolean;
+	onBack?: () => void;
 }
 
 export default function ArticleForm({
@@ -25,6 +28,8 @@ export default function ArticleForm({
 	isLoading = false,
 	initialData,
 	mode = "create",
+	showBackButton = false,
+	onBack,
 }: ArticleFormProps) {
 	const { tags } = useTags();
 	const [formData, setFormData] = useState({
@@ -101,94 +106,111 @@ export default function ArticleForm({
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="space-y-6">
-			{/* Título */}
-			<div>
-				<label className="block text-sm font-medium text-gray-700 mb-2">
-					Título do artigo *
-				</label>
-				<Input
-					type="text"
-					placeholder="Título"
-					value={formData.title}
-					onChange={(e) => handleInputChange("title", e.target.value)}
-					className={errors.title ? "border-red-500" : ""}
-				/>
-				{errors.title && (
-					<p className="mt-1 text-sm text-red-600">{errors.title}</p>
-				)}
-			</div>
+		<div>
+			<PageHeader
+				title={mode === "create" ? "Novo artigo" : "Editar artigo"}
+				showBackButton={showBackButton}
+				onBack={onBack}
+				action={
+					<Button
+						type="submit"
+						disabled={isLoading}
+						className="px-8 py-3 text-lg font-semibold"
+						onClick={handleSubmit}
+					>
+						{isLoading
+							? mode === "create"
+								? "Criando..."
+								: "Salvando..."
+							: mode === "create"
+							? "Criar artigo"
+							: "Salvar"}
+					</Button>
+				}
+			/>
 
-			{/* Imagem */}
-			<div>
-				<label className="block text-sm font-medium text-gray-700 mb-2">
-					Imagem do artigo
-				</label>
-				<Input
-					type="url"
-					placeholder="URL da imagem"
-					value={formData.coverImageUrl}
-					onChange={(e) => handleInputChange("coverImageUrl", e.target.value)}
-				/>
-			</div>
-
-			{/* Tags */}
-			<div>
-				<label className="block text-sm font-medium text-gray-700 mb-2">
-					Tags *
-				</label>
-				<div className="flex flex-wrap gap-2">
-					{tags?.map((tag: TagDto) => (
-						<button
-							key={tag.slug}
-							type="button"
-							onClick={() => handleTagToggle(tag.slug)}
-							className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-								formData.tags.includes(tag.slug)
-									? "bg-primary text-white"
-									: "bg-input-background text-gray-700 hover:bg-gray-200"
-							}`}
-						>
-							{tag.name}
-						</button>
-					))}
+			<form onSubmit={handleSubmit} className="space-y-8">
+				{/* Título */}
+				<div>
+					<label className="block text-lg font-semibold text-foreground mb-3">
+						Título do artigo *
+					</label>
+					<Input
+						type="text"
+						placeholder="Título"
+						value={formData.title}
+						onChange={(e) => handleInputChange("title", e.target.value)}
+						className={`w-full px-4 py-3 text-lg bg-input-background border-0 rounded-lg placeholder-placeholder-text text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 ${
+							errors.title ? "ring-2 ring-red-500" : ""
+						}`}
+					/>
+					{errors.title && (
+						<p className="mt-2 text-sm text-red-600">{errors.title}</p>
+					)}
 				</div>
-				{errors.tags && (
-					<p className="mt-1 text-sm text-red-600">{errors.tags}</p>
-				)}
-			</div>
 
-			{/* Conteúdo */}
-			<div>
-				<label className="block text-sm font-medium text-gray-700 mb-2">
-					Conteúdo *
-				</label>
-				<textarea
-					placeholder="Escreva aqui seu artigo..."
-					value={formData.content}
-					onChange={(e) => handleInputChange("content", e.target.value)}
-					rows={12}
-					className={`w-full px-4 py-3 border border-gray-300 rounded-lg bg-input-background placeholder-placeholder-text text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none ${
-						errors.content ? "border-red-500" : ""
-					}`}
-				/>
-				{errors.content && (
-					<p className="mt-1 text-sm text-red-600">{errors.content}</p>
-				)}
-			</div>
+				{/* Imagem */}
+				<div>
+					<label className="block text-lg font-semibold text-foreground mb-3">
+						Imagem do artigo
+					</label>
+					<Input
+						type="url"
+						placeholder="URL da imagem"
+						value={formData.coverImageUrl}
+						onChange={(e) => handleInputChange("coverImageUrl", e.target.value)}
+						className="w-full px-4 py-3 text-lg bg-input-background border-0 rounded-lg placeholder-placeholder-text text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+					/>
+				</div>
 
-			{/* Botão de Submit */}
-			<div className="flex justify-end">
-				<Button type="submit" disabled={isLoading} className="px-8 py-3">
-					{isLoading
-						? mode === "create"
-							? "Criando..."
-							: "Salvando..."
-						: mode === "create"
-						? "Criar artigo"
-						: "Salvar"}
-				</Button>
-			</div>
-		</form>
+				{/* Tags */}
+				<div>
+					<label className="block text-lg font-semibold text-foreground mb-3">
+						Tags *
+					</label>
+					<div className="flex flex-wrap gap-3">
+						{tags?.map((tag: TagDto) => (
+							<button
+								key={tag.slug}
+								type="button"
+								onClick={() => handleTagToggle(tag.slug)}
+								className={`
+								px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0
+								${
+									formData.tags.includes(tag.slug)
+										? "bg-primary/[20%] text-primary"
+										: "bg-input-background text-foreground hover:bg-primary/[20%] hover:text-primary"
+								}
+							`}
+							>
+								{tag.name}
+							</button>
+						))}
+					</div>
+					{errors.tags && (
+						<p className="mt-2 text-sm text-red-600">{errors.tags}</p>
+					)}
+				</div>
+
+				{/* Conteúdo */}
+				<div>
+					<label className="block text-lg font-semibold text-foreground mb-3">
+						Conteúdo *
+					</label>
+					<textarea
+						placeholder="Escreva aqui seu artigo..."
+						value={formData.content}
+						onChange={(e) => handleInputChange("content", e.target.value)}
+						rows={12}
+						className={`w-full px-4 py-3 text-lg bg-input-background border-0 rounded-lg placeholder-placeholder-text text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 resize-none ${
+							errors.content ? "ring-2 ring-red-500" : ""
+						}`}
+					/>
+					{errors.content && (
+						<p className="mt-2 text-sm text-red-600">{errors.content}</p>
+					)}
+				</div>
+			</form>
+		</div>
 	);
 }

@@ -55,7 +55,7 @@ export default function ArticlePage() {
 		<PageLayout>
 			<Container size="md" className="py-8">
 				{/* Cabeçalho do artigo */}
-				<ArticleHeader article={article} />
+				<ArticleHeader article={article} showBackButton={true} onBack={() => router.push("/artigos")} />
 
 				{/* Conteúdo do artigo */}
 				<ArticleContent content={article.content} />

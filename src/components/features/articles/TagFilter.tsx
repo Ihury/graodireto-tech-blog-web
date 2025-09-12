@@ -39,7 +39,7 @@ export default function TagFilter({
 							${
 								isSelected
 									? "bg-primary/[20%] text-primary"
-									: "bg-input-background text-foreground hover:bg-gray-200"
+									: "bg-input-background text-foreground hover:bg-primary/[20%] hover:text-primary"
 							}
 						`}
 					>
