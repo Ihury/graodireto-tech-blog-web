@@ -94,6 +94,14 @@ class TechBlogApiClient {
 		});
 	}
 
+	async patch<T>(endpoint: string, data?: unknown): Promise<ApiResponse<T>> {
+		return this.request<T>({
+			method: "PATCH",
+			url: endpoint,
+			data,
+		});
+	}
+
 	async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
 		return this.request<T>({
 			method: "DELETE",

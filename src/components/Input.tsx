@@ -1,7 +1,7 @@
 import { InputHTMLAttributes, forwardRef } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-	label: string;
+	label?: string;
 	error?: string;
 }
 
@@ -9,9 +9,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 	({ label, error, className = "", ...props }, ref) => {
 		return (
 			<div className="w-full">
-				<label className="block text-sm font-medium text-foreground mb-2">
-					{label}
-				</label>
+				{label && (
+					<label className="block text-sm font-medium text-foreground mb-2">
+						{label}
+					</label>
+				)}
 				<input
 					ref={ref}
 					className={`

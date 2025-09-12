@@ -1,7 +1,5 @@
-"use client";
-
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/contexts/ToastContext";
 import Header from "@/components/Header";
@@ -21,7 +19,7 @@ export default function LoginPage() {
 		try {
 			await login({ email, password });
 			showSuccess("Login realizado com sucesso!");
-			router.push("/");
+			router.push("/artigos");
 		} catch (err) {
 			const errorMessage =
 				err instanceof Error ? err.message : "Erro ao fazer login";

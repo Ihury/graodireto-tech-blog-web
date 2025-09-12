@@ -48,11 +48,11 @@ export function useArticles(options: UseArticlesOptions = {}) {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [pagination, search, tags]);
+	}, [pagination.page, pagination.size, search, tags, pagination.updateTotal]);
 
 	useEffect(() => {
 		fetchArticles();
-	}, [fetchArticles]);
+	}, [pagination.page, pagination.size, search, tags]);
 
 	// Memoizar o objeto de paginação para evitar re-renders desnecessários
 	const paginationData = useMemo(
