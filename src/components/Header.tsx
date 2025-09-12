@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { SignOutIcon } from "@phosphor-icons/react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -11,10 +12,12 @@ export default function Header({
 	showAuthButton = true,
 	onBackClick,
 }: HeaderProps) {
+	const router = useRouter();
 	const { isAuthenticated, logout, user } = useAuth();
 
 	const handleLogout = () => {
 		logout();
+		router.push("/");
 	};
 
 	return (

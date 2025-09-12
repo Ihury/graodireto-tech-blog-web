@@ -48,11 +48,13 @@ export function useCommentsByArticle(options: UseCommentsByArticleOptions) {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [articleId, pagination]);
+	}, [articleId, pagination.size, pagination.cursor, pagination.setCursor]);
 
 	useEffect(() => {
-		fetchComments();
-	}, [fetchComments]);
+		if (articleId) {
+			fetchComments();
+		}
+	}, [fetchComments, articleId]);
 
 	// Memoizar o objeto de paginação para evitar re-renders desnecessários
 	const paginationData = useMemo(
@@ -109,11 +111,13 @@ export function useCommentReplies(options: UseCommentRepliesOptions) {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [commentId, pagination]);
+	}, [commentId, pagination.size, pagination.cursor, pagination.setCursor]);
 
 	useEffect(() => {
-		fetchReplies();
-	}, [fetchReplies]);
+		if (commentId) {
+			fetchReplies();
+		}
+	}, [fetchReplies, commentId]);
 
 	// Memoizar o objeto de paginação para evitar re-renders desnecessários
 	const paginationData = useMemo(
