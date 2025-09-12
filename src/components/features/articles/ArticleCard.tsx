@@ -1,5 +1,6 @@
-import { PencilSimpleIcon } from "@phosphor-icons/react";
+import { NotePencilIcon } from "@phosphor-icons/react";
 import { ArticleListItemResponseDto } from "@/types/techBlogApi";
+import { Tag } from "@/components/ui";
 
 interface ArticleCardProps {
 	article: ArticleListItemResponseDto;
@@ -24,9 +25,9 @@ export default function ArticleCard({
 	const shouldShowEditButton = showEditButton && isAuthor;
 
 	return (
-		<div className="flex items-center gap-4 p-4 bg-white rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+		<div className="flex items-start gap-4 p-4 bg-white rounded-lg">
 			{/* Thumbnail */}
-			<div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center">
+			<div className="w-16 h-16 bg-gray-100 rounded-lg flex-shrink-0 flex items-center justify-center relative">
 				{article.coverImageUrl ? (
 					<img
 						src={article.coverImageUrl}
@@ -40,20 +41,39 @@ export default function ArticleCard({
 
 			{/* Content */}
 			<div className="flex-1 min-w-0">
-				<h3 className="text-lg font-semibold text-foreground mb-1 truncate">
-					{article.title}
-				</h3>
-				<p className="text-sm text-gray-600 mb-2 line-clamp-2">
+				{/* Title and Tags - Mobile: tags como parte do título, Desktop: apenas título */}
+				<div className="mb-2">
+					<h3 className="text-lg font-semibold text-foreground">
+						{article.title}
+						{/* Tags - Mobile: como parte do título, com quebra de linha */}
+						<span className="sm:hidden">
+							{article.tags.map((tag) => (
+								<Tag
+									key={tag.slug}
+									name={tag.name}
+									slug={tag.slug}
+									variant="small"
+									className="ml-2 inline-block"
+								/>
+							))}
+						</span>
+					</h3>
+				</div>
+
+				{/* Summary */}
+				<p className="text-sm text-gray-600 mb-3 line-clamp-2">
 					{article.summary || "Sem descrição disponível"}
 				</p>
-				<div className="flex items-center gap-2 flex-wrap">
+
+				{/* Tags - Desktop: abaixo do sumário */}
+				<div className="hidden sm:flex items-center gap-2 flex-wrap">
 					{article.tags.map((tag) => (
-						<span
+						<Tag
 							key={tag.slug}
-							className="px-2 py-1 text-xs font-medium bg-input-background text-foreground rounded-md"
-						>
-							{tag.name}
-						</span>
+							name={tag.name}
+							slug={tag.slug}
+							variant="default"
+						/>
 					))}
 				</div>
 			</div>
@@ -62,10 +82,10 @@ export default function ArticleCard({
 			{shouldShowEditButton && (
 				<button
 					onClick={handleEdit}
-					className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"
+					className="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors flex-shrink-0"
 					title="Editar artigo"
 				>
-					<PencilSimpleIcon size={16} weight="regular" />
+					<NotePencilIcon size={16} weight="regular" />
 				</button>
 			)}
 		</div>

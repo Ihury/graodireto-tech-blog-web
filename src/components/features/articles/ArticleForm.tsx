@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { TagDto } from "@/types/techBlogApi";
 import { useTags } from "@/hooks/useTags";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
+import { Input, Button } from "../../ui";
 
 interface ArticleFormProps {
 	onSubmit: (data: {

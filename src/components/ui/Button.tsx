@@ -16,7 +16,7 @@ export default function Button({
 	...props
 }: ButtonProps) {
 	const baseClasses =
-		"font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
+		"font-medium rounded-2xl transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
 
 	const variantClasses = {
 		primary: "bg-primary text-white hover:bg-primary/90 focus:ring-primary",

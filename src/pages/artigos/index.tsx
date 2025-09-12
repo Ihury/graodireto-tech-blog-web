@@ -1,12 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
-import { PlusIcon } from "@phosphor-icons/react";
-import Header from "@/components/Header";
-import Button from "@/components/Button";
-import ArticleCard from "@/components/ArticleCard";
-import TagFilter from "@/components/TagFilter";
-import SearchBar from "@/components/SearchBar";
-import Pagination from "@/components/Pagination";
+import { PageLayout, Container, PageHeader } from "@/components/layout";
+import { Button, SearchBar, Pagination } from "@/components/ui";
+import { ArticleList, TagFilter } from "@/components/features/articles";
 import { useArticles } from "@/hooks/useArticles";
 import { useTags } from "@/hooks/useTags";
 import { useToast } from "@/contexts/ToastContext";
@@ -92,20 +88,17 @@ export default function ArtigosPage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-background">
-			<Header />
-
-			<main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+		<PageLayout>
+			<Container size="xl" className="py-8">
 				{/* Header da página */}
-				<div className="flex justify-between items-center mb-8">
-					<h1 className="text-3xl font-bold text-foreground">
+				<div className="flex justify-between items-center gap-4 mb-6">
+					<h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground">
 						Todos os artigos
 					</h1>
 					<Button
 						onClick={handleCreateArticle}
-						className="flex items-center gap-2"
+						className="flex items-center gap-2 text-sm sm:text-base px-3 py-2 sm:px-4"
 					>
-						<PlusIcon size={20} weight="regular" />
 						Criar artigo
 					</Button>
 				</div>
@@ -123,51 +116,22 @@ export default function ArtigosPage() {
 					value={searchTerm}
 					onChange={handleSearchChange}
 					placeholder="Pesquisar..."
-					className="mb-8"
+					className="mb-6"
 				/>
 
 				{/* Lista de artigos */}
-				<div className="space-y-4 mb-8">
-					{articlesLoading ? (
-						// Loading skeleton
-						Array.from({ length: 6 }).map((_, index) => (
-							<div
-								key={index}
-								className="flex items-center gap-4 p-4 bg-white rounded-lg border border-gray-200"
-							>
-								<div className="w-16 h-16 bg-gray-200 rounded-lg animate-pulse" />
-								<div className="flex-1">
-									<div className="h-4 bg-gray-200 rounded animate-pulse mb-2" />
-									<div className="h-3 bg-gray-200 rounded animate-pulse mb-2 w-3/4" />
-									<div className="h-6 bg-gray-200 rounded animate-pulse w-20" />
-								</div>
-							</div>
-						))
-					) : articlesData?.data && articlesData.data.length > 0 ? (
-						articlesData.data.map((article) => (
-							<div
-								key={article.id}
-								onClick={() => handleArticleClick(article)}
-								className="cursor-pointer"
-							>
-								<ArticleCard
-									article={article}
-									showEditButton={true}
-									onEdit={handleEditArticle}
-									currentUserId={user?.id}
-								/>
-							</div>
-						))
-					) : (
-						<div className="text-center py-12">
-							<p className="text-gray-500 text-lg">
-								{searchTerm || selectedTags.length > 0
-									? "Nenhum artigo encontrado com os filtros aplicados"
-									: "Nenhum artigo encontrado"}
-							</p>
-						</div>
-					)}
-				</div>
+				<ArticleList
+					articles={articlesData?.data || []}
+					isLoading={articlesLoading}
+					onArticleClick={handleArticleClick}
+					onArticleEdit={handleEditArticle}
+					currentUserId={user?.id}
+					emptyMessage={
+						searchTerm || selectedTags.length > 0
+							? "Nenhum artigo encontrado com os filtros aplicados"
+							: "Nenhum artigo encontrado"
+					}
+				/>
 
 				{/* Paginação */}
 				{pagination.totalPages > 1 && (
@@ -177,7 +141,7 @@ export default function ArtigosPage() {
 						onPageChange={handlePageChange}
 					/>
 				)}
-			</main>
-		</div>
+			</Container>
+		</PageLayout>
 	);
 }

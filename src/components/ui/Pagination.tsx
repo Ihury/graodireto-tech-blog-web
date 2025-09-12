@@ -1,3 +1,5 @@
+import React from "react";
+
 interface PaginationProps {
 	currentPage: number;
 	totalPages: number;
@@ -46,7 +48,7 @@ export default function Pagination({
 						w-10 h-10 rounded-full text-sm font-medium transition-colors
 						${
 							page === currentPage
-								? "bg-input-background text-foreground"
+								? "bg-input-background text-foreground shadow-sm"
 								: "text-gray-600 hover:bg-gray-100"
 						}
 					`}

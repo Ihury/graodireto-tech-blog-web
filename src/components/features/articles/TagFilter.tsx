@@ -15,11 +15,11 @@ export default function TagFilter({
 }: TagFilterProps) {
 	if (isLoading) {
 		return (
-			<div className="flex gap-2 mb-6">
-				{Array.from({ length: 5 }).map((_, index) => (
+			<div className="flex gap-2 mb-4">
+				{Array.from({ length: 8 }).map((_, index) => (
 					<div
 						key={index}
-						className="h-8 w-20 bg-gray-200 rounded-lg animate-pulse"
+						className="h-8 w-20 bg-gray-200 rounded-full animate-pulse"
 					/>
 				))}
 			</div>
@@ -27,7 +27,7 @@ export default function TagFilter({
 	}
 
 	return (
-		<div className="flex gap-2 mb-6 flex-wrap">
+		<div className="flex gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide">
 			{tags.map((tag) => {
 				const isSelected = selectedTags.includes(tag.slug);
 				return (
@@ -35,11 +35,11 @@ export default function TagFilter({
 						key={tag.slug}
 						onClick={() => onTagToggle(tag.slug)}
 						className={`
-							px-4 py-2 rounded-lg text-sm font-medium transition-colors
+							px-3 py-2 rounded-lg text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0
 							${
 								isSelected
-									? "bg-input-background text-foreground"
-									: "bg-gray-100 text-gray-700 hover:bg-gray-200"
+									? "bg-primary/[20%] text-primary"
+									: "bg-input-background text-foreground hover:bg-gray-200"
 							}
 						`}
 					>
