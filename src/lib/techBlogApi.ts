@@ -4,6 +4,13 @@ import { ApiError, ApiResponse } from "@/types/techBlogApi";
 // Configuração da API
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
+// Callback para notificar sobre erros 401
+let onUnauthorizedCallback: (() => void) | null = null;
+
+export const setUnauthorizedCallback = (callback: () => void) => {
+	onUnauthorizedCallback = callback;
+};
+
 class TechBlogApiClient {
 	private axiosInstance: ReturnType<typeof axios.create>;
 
@@ -48,6 +55,11 @@ class TechBlogApiClient {
 					statusCode: error.response?.status || 0,
 					error: error.response?.data?.error || error.code || "NETWORK_ERROR",
 				};
+
+				// Se for erro 401 (Unauthorized), chamar callback de logout
+				if (apiError.statusCode === 401 && onUnauthorizedCallback) {
+					onUnauthorizedCallback();
+				}
 
 				// Retornar erro no formato esperado
 				return Promise.reject(apiError);

@@ -9,6 +9,7 @@ import React, {
 } from "react";
 import { UserResponseDto, LoginDto } from "@/types/techBlogApi";
 import { AuthService } from "@/services/auth.service";
+import { setUnauthorizedCallback } from "@/lib/techBlogApi";
 
 interface AuthContextType {
 	user: UserResponseDto | null;
@@ -30,6 +31,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
 	const [isLoading, setIsLoading] = useState(true);
 
 	const isAuthenticated = !!user;
+
+	// Configurar callback para logout automático em caso de erro 401
+	useEffect(() => {
+		const handleUnauthorized = () => {
+			AuthService.logout();
+			setUser(null);
+		};
+
+		setUnauthorizedCallback(handleUnauthorized);
+
+		// Cleanup: remover callback quando o componente for desmontado
+		return () => {
+			setUnauthorizedCallback(() => {});
+		};
+	}, []);
 
 	// Carregar dados do usuário do localStorage na inicialização
 	useEffect(() => {

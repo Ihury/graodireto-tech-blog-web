@@ -64,6 +64,8 @@ export class AuthService {
 		if (typeof window !== "undefined") {
 			localStorage.removeItem("access_token");
 			localStorage.removeItem("user");
+			// Redirecionar para home após logout
+			window.location.href = "/";
 		}
 	}
 
