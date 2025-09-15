@@ -1,36 +1,135 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TechBlog Web — MVP (Frontend)
 
-## Getting Started
+Aplicação **Next.js (App Router)** para consumir a **TechBlog API** do desafio. Permite **listar/ler artigos**, **buscar por texto**, **filtrar por tags** e **interagir com comentários** (com **login via usuários do seed** do backend).
 
-First, run the development server:
+[![Status](https://img.shields.io/badge/status-MVP-green)]()
+[![Next.js](https://img.shields.io/badge/Next.js-14%2B-black)]()
+[![TypeScript](https://img.shields.io/badge/TypeScript-on-blue)]()
+[![Tailwind](https://img.shields.io/badge/TailwindCSS-on-38B2AC)]()
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Sumário
+
+* [Visão Geral](#visão-geral)
+* [Pré-requisitos](#pré-requisitos)
+* [Ambiente (.env.local)](#ambiente-envlocal)
+* [Como Rodar](#como-rodar)
+* [Fluxos Principais](#fluxos-principais)
+* [Integração com a API](#integração-com-a-api)
+* [UI/UX & Acessibilidade](#uiux--acessibilidade)
+* [Roadmap Frontend](#roadmap-frontend)
+
+---
+
+## Visão Geral
+
+* **Objetivo:** prover interface simples e responsiva para **Artigos**, **Tags** e **Comentários**.
+* **Autenticação:** e-mail/senha → **JWT** (login com usuários do **seed** do backend).
+* **Principais telas:**
+
+  * **/login** — autenticação
+  * **/** ou **/artigos** — listagem com **busca** e **filtro por tags**
+  * **/artigos/\[slug]** — leitura do artigo + **comentários** (threading)
+
+
+* **App Router** (Next 15+): rotas em `src/app/pages`.
+* **Estilização:** **TailwindCSS**.
+* **Estado de dados:** hooks + fetch; opcional TanStack Query para cache/infinite scroll.
+
+
+---
+
+## Pré-requisitos
+
+* **Node.js 22+**
+* **npm**
+* **TechBlog API** rodando e acessível localmente
+
+---
+
+## Ambiente (.env.local)
+
+Crie um arquivo **`.env.local`** na raiz:
+
+```env
+# URL base da API (ex.: Nest expõe /api)
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Como Rodar
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# 1) Instalar dependências
+npm install
 
-## Learn More
+# 2) Subir o app no modo dev
+npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Fluxos Principais
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Login
 
-## Deploy on Vercel
+1. Usuário informa `email` e `password`.
+2. Front envia `POST /auth/login` para a API.
+3. Em sucesso, **armazenar o JWT** (MVP: `localStorage`).
+4. Redirecionar para a Home.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Listagem de artigos
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+* Query params: `page`, `size`, `tags`, `search`.
+* UI exibe **chips de tags**, **campo de busca** e **paginação** (*offset*).
+
+### Leitura do artigo + comentários
+
+* Buscar artigo por `slug`.
+* Listar comentários com **cursor** (`after`) e `size`.
+* Enviar comentário (exige login).
+
+---
+
+## Integração com a API
+
+### Convenções
+
+* **Base URL:** `NEXT_PUBLIC_API_BASE_URL`
+* **Auth:** `Authorization: Bearer <token>` quando autenticado
+* **Paginação (offset):**
+
+  ```json
+  { "data": [/* ... */], "meta": { "page": 1, "size": 10, "total": 42 } }
+  ```
+* **Cursor (comentários):**
+
+  ```json
+  { "data": [/* ... */], "meta": { "size": 10, "nextCursor": "..." } }
+  ```
+
+---
+
+## UI/UX & Acessibilidade
+
+* **Paginação**: *offset* para artigos; *cursor* para comentários.
+* **Estados**: carregando, vazio (“nenhum artigo encontrado”), erro com retry.
+* **Responsividade**: layout mobile-first, grid/cards.
+
+---
+
+## Qualidade
+
+* **Lint/Format**: `npm run lint` + Prettier.
+
+---
+
+## Roadmap Frontend
+
+* **Debounce** para barras de pesquisa e tags
+* **Cache de dados** com TanStack Query; **infinite scroll** em comentários.
+* **Design System** (componentes base).
+* **Reações e favoritos**, **perfil do autor**, **gerenciamento de usuários**.
+* **Observabilidade**.
