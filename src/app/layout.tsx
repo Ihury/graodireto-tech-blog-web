@@ -11,6 +11,9 @@ const newsreader = Newsreader({
 export const metadata: Metadata = {
 	title: "Tech Blog - Grão Direto",
 	description: "Blog de tecnologia da Grão Direto",
+	icons: {
+		icon: "/favicon.ico",
+	},
 };
 
 export default function RootLayout({
